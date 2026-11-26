@@ -9,6 +9,15 @@
 
 <p align="center"><img src="docs/dashboard-ar.png" width="300" alt="Arabic dashboard"> <img src="docs/units-en.png" width="300" alt="Units list in English"></p>
 
+## Screenshots
+
+Captured from the live site (https://yousefkhames.github.io/3eqary/).
+
+<p>
+  <img src="docs/screenshots/live-desktop.png" alt="3eqary desktop view" width="640">
+  <img src="docs/screenshots/live-mobile.png" alt="3eqary mobile view" width="200">
+</p>
+
 ## The pitch
 
 If you rent out a few flats or shops, your records live in a notebook and a WhatsApp chat. You forget who paid, when a contract ends, and which leak is still unfixed. 3eqary puts that in one screen on your phone. Add a unit, record the tenant and rent, and it tells you who is late, whose contract ends soon, and what needs fixing. No account, no server.
