@@ -85,3 +85,8 @@ test('sample data is coherent', () => {
   const sm = L.summary(s, '2026-11', T); assert.ok(sm.expected > 0 && sm.rate <= 100);
 });
 test('num parsing', () => { assert.equal(L.num('12.345'), 12.35); assert.equal(L.num('-5'), 0); assert.equal(L.num('abc'), 0); });
+test('sample data has no phantom arrears before the first month', () => {
+  const s = L.sampleState(T);
+  const a1 = L.arrears(s.units[0], s, T), a3 = L.arrears(s.units[2], s, T);
+  assert.equal(a1.total, 0); assert.equal(a3.months.length, 1); assert.equal(a3.months[0].month, '2026-11');
+});

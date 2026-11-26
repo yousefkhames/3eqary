@@ -151,3 +151,6 @@ label.f input:focus,label.f select:focus,label.f textarea:focus{border-color:var
 .grid>*{min-width:0}
 .row{flex-wrap:wrap}
 .row .grow{flex:1 1 140px}
+.row.nowrap{flex-wrap:nowrap}
+.row.nowrap .grow{flex:1 1 0}
+bdi{unicode-bidi:isolate}

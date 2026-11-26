@@ -76,7 +76,7 @@
   function contractText(c) { return t('ct_' + c.code, { n: num(c.days || 0) }); }
   function remText(r) {
     var u = unitById(r.unitId), un = u ? u.name : '';
-    var v = { u: esc(un), n: num(r.days || 0), a: money(r.amount), t: esc(r.title || '') };
+    var v = { u: '<bdi>' + esc(un) + '</bdi>', n: num(r.days || 0), a: money(r.amount), t: esc(r.title || '') };
     if (r.kind === 'due' && r.days === 0) return t('rm_due0', v);
     var k = { overdue: 'rm_overdue', due: 'rm_due', arrears: 'rm_arrears', expiring: 'rm_expiring', expired: 'rm_expired', 'urgent-ticket': 'rm_urgent' }[r.kind];
     return t(k, v);
@@ -167,7 +167,7 @@
     h += '<div class="card sec"><h2>' + t('payments') + '</h2>';
     if (!pays.length) h += '<p class="muted">' + t('no_payments') + '</p>';
     pays.forEach(function (p) {
-      h += '<div class="row"><div class="grow"><b>' + esc(monthFmt(p.month)) + '</b><small>' + dateFmt(p.date) + (p.note ? ' · ' + esc(p.note) : '') + '</small></div><span class="amt">' + money(p.amount) + '</span>' +
+      h += '<div class="row nowrap"><div class="grow"><b>' + esc(monthFmt(p.month)) + '</b><small>' + dateFmt(p.date) + (p.note ? ' · ' + esc(p.note) : '') + '</small></div><span class="amt">' + money(p.amount) + '</span>' +
         '<button class="btn sm ghost" type="button" data-act="receipt" data-id="' + p.id + '">' + t('receipt') + '</button>' +
         '<button class="btn sm danger" type="button" data-act="delpay" data-id="' + p.id + '" aria-label="' + t('delete') + '">&times;</button></div>';
     });

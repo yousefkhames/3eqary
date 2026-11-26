@@ -178,9 +178,9 @@
   function sampleState(today) {
     var cur = monthKey(today), pm = addMonths(cur, -1), d = function (m, day) { return m + '-' + pad(day); };
     var u = [
-      { id: 'u1', name: 'شقة 3 - الدور الثاني', address: 'شارع الجيش، الإسكندرية', tenant: 'محمود السيد', phone: '01001234567', rent: 3500, dueDay: 1, start: d(addMonths(cur, -8), 1), end: d(addMonths(cur, 4), 1), deposit: 7000, notes: 'يدفع نقدًا', files: [] },
+      { id: 'u1', name: 'شقة 3 - الدور الثاني', address: 'شارع الجيش، الإسكندرية', tenant: 'محمود السيد', phone: '01001234567', rent: 3500, dueDay: 1, start: d(addMonths(cur, -7), 1), end: d(addMonths(cur, 4), 1), deposit: 7000, notes: 'يدفع نقدًا', files: [] },
       { id: 'u2', name: 'شقة 5 - الدور الثالث', address: 'شارع الجيش، الإسكندرية', tenant: 'هالة إبراهيم', phone: '01119876543', rent: 4200, dueDay: 5, start: d(addMonths(cur, -3), 5), end: d(addMonths(cur, 1), 20), deposit: 8400, notes: '', files: [] },
-      { id: 'u3', name: 'محل أرضي', address: 'ميدان المنشية', tenant: 'مكتبة النور', phone: '01224445566', rent: 6000, dueDay: 10, start: d(addMonths(cur, -14), 10), end: d(addMonths(cur, 9), 10), deposit: 12000, notes: 'تجديد سنوي', files: [] },
+      { id: 'u3', name: 'محل أرضي', address: 'ميدان المنشية', tenant: 'مكتبة النور', phone: '01224445566', rent: 6000, dueDay: 10, start: d(addMonths(cur, -13), 10), end: d(addMonths(cur, 9), 10), deposit: 12000, notes: 'تجديد سنوي', files: [] },
       { id: 'u4', name: 'استوديو 1', address: 'سموحة', tenant: '', phone: '', rent: 2800, dueDay: 1, start: '', end: '', deposit: 0, notes: 'جاهز للتأجير', files: [] }
     ];
     var pay = [], n = 0;

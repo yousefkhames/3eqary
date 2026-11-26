@@ -69,7 +69,7 @@ window.I18N = {
     any_unit: 'No unit', unit: 'Unit', pick_unit: 'Pick a unit', need_unit: 'Add a unit first.',
     reminders: 'Reminders', auto_rem: 'Automatic', my_rem: 'My reminders', add_rem: 'New reminder', rem_title: 'Title', rem_date: 'Date', no_rem: 'No personal reminders.',
     export_ics: 'Export to calendar (ICS)', done: 'Done',
-    rm_overdue: '{u}: rent {n} days late, {a} left', rm_due: '{u}: rent due in {n} days ({a})', rm_arrears: '{u}: arrears over {n} months, total {a}',
+    rm_overdue: '{u}: rent {n} days late, {a} left', rm_due: '{u}: rent due in {n} days ({a})', rm_arrears: '{u}: unpaid rent from {n} earlier month(s), total {a}',
     rm_expiring: '{u}: contract ends in {n} days', rm_expired: '{u}: contract ended {n} days ago', rm_urgent: '{u}: urgent repair: {t}',
     rm_due0: '{u}: rent is due today ({a})',
     settings: 'Settings', language: 'Language', currency: 'Currency', data: 'Your data', backup: 'Backup (JSON)', restore: 'Restore backup', csv: 'Export payments (CSV)',

@@ -1,0 +1,11 @@
+{
+  "name": "3eqary",
+  "version": "1.0.0",
+  "description": "Rental status, contract files, maintenance and reminders for small landlords. Static, client-side, Arabic and English.",
+  "license": "MIT",
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "e2e": "node tests/e2e.js",
+    "serve": "python3 -m http.server 8099"
+  }
+}
