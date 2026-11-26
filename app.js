@@ -406,3 +406,5 @@
   window.addEventListener('hashchange', function () { render(); window.scrollTo(0, 0); });
   render();
 })();
+
+;if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});

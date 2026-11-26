@@ -25,6 +25,7 @@ If you rent out a few flats or shops, your records live in a notebook and a What
 - **Search and filters** on units: overdue, contract ending, vacant.
 - **Backup and restore** as JSON, payments export as CSV (opens in Excel with Arabic text).
 - **Arabic and English**, full RTL layout, mobile first, works on desktop too.
+- Installable as a home-screen app and opens offline after the first visit.
 
 ## Run it
 
