@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>3eqary | عقاري</title>
+<meta name="description" content="Rental status, contract files, maintenance and reminders for small landlords. Runs in your browser.">
+<meta name="theme-color" content="#1f3a34">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+  <header class="top">
+    <a class="brand" href="#/" aria-label="3eqary">
+      <img src="logo.svg" alt="" width="34" height="34">
+      <span><b id="brandName">3eqary</b><small id="brandTag"></small></span>
+    </a>
+    <button class="lang" id="langBtn" type="button" aria-label="Language"></button>
+  </header>
+  <nav class="tabs" id="tabs" aria-label="main"></nav>
+  <main id="view" tabindex="-1"></main>
+</div>
+<dialog id="dlg"><form method="dialog" id="dlgForm"><div class="dlg-head"><h2 id="dlgTitle"></h2><button type="button" class="x" id="dlgX" aria-label="close">&times;</button></div><div id="dlgBody"></div></form></dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="print-area"></div>
+<script src="logic.js"></script>
+<script src="i18n.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
