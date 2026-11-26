@@ -39,7 +39,7 @@ window.I18N = {
     total_paid: 'إجمالي المدفوع', arrears: 'متأخرات', tenant_name_req: 'اكتب اسم المستأجر أو اتركه فارغًا لو الوحدة شاغرة.',
     name_req: 'اسم الوحدة مطلوب', rent_req: 'أدخل إيجارًا صحيحًا', date_bad: 'تاريخ النهاية قبل البداية', amt_req: 'أدخل مبلغًا صحيحًا',
     end_tenant: 'إنهاء الإيجار (إخلاء الوحدة)', end_tenant_q: 'إخلاء الوحدة؟ سجل الدفعات يبقى محفوظًا.', call: 'اتصال', wa: 'واتساب',
-    due_today: 'اليوم'
+    due_today: 'اليوم', ledger_hint: 'اضغط على شهر غير مسدد لتسجيل دفعته.', search: 'بحث بالاسم أو المستأجر أو الهاتف', no_match: 'لا توجد نتائج.', uf_all: 'الكل', uf_overdue: 'متأخرة', uf_expiring: 'عقد ينتهي', uf_vacant: 'شاغرة'
   },
   en: {
     app: '3eqary', tag: 'Small-landlord manager',
@@ -80,6 +80,6 @@ window.I18N = {
     total_paid: 'Total paid', arrears: 'Arrears', tenant_name_req: 'Enter a tenant name, or leave empty if vacant.',
     name_req: 'Unit name is required', rent_req: 'Enter a valid rent', date_bad: 'End date is before start', amt_req: 'Enter a valid amount',
     end_tenant: 'End tenancy (mark vacant)', end_tenant_q: 'Mark this unit vacant? Payment history is kept.', call: 'Call', wa: 'WhatsApp',
-    due_today: 'Today'
+    due_today: 'Today', ledger_hint: 'Tap an unpaid month to record its payment.', search: 'Search name, tenant or phone', no_match: 'No matches.', uf_all: 'All', uf_overdue: 'Overdue', uf_expiring: 'Contract ending', uf_vacant: 'Vacant'
   }
 };

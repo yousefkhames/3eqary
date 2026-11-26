@@ -6,7 +6,7 @@
   var fakeToday = /^\d{4}-\d{2}-\d{2}$/.test(qs.get('today') || '') ? qs.get('today') : null;
   function today() { return fakeToday || L.iso(new Date()); }
 
-  var S = load(), month = L.monthKey(today()), tickFilter = 'all';
+  var S = load(), month = L.monthKey(today()), tickFilter = 'all', unitFilter = 'all', unitQuery = '';
 
   function load() {
     try { var raw = localStorage.getItem(KEY); if (raw) return L.normalize(JSON.parse(raw)); } catch (e) { /* corrupt: start clean */ }
@@ -25,7 +25,8 @@
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function loc() { return S.lang === 'ar' ? 'ar-EG' : 'en-GB'; }
-  function money(n) { return new Intl.NumberFormat(loc(), { maximumFractionDigits: 2 }).format(n || 0) + ' ' + esc(S.currency); }
+  function curLabel() { return S.lang === 'ar' && S.currency === 'EGP' ? 'ج.م' : S.currency; }
+  function money(n) { return new Intl.NumberFormat(loc(), { maximumFractionDigits: 2 }).format(n || 0) + ' ' + esc(curLabel()); }
   function num(n) { return new Intl.NumberFormat(loc()).format(n); }
   function dateFmt(s) { if (!s) return '-'; return new Intl.DateTimeFormat(loc(), { day: 'numeric', month: 'short', year: 'numeric' }).format(L.parse(s)); }
   function monthFmt(m) { return new Intl.DateTimeFormat(loc(), { month: 'long', year: 'numeric' }).format(L.parse(m + '-01')); }
@@ -85,7 +86,9 @@
     for (var i = 11; i >= 0; i--) {
       var m = L.addMonths(cur, -i), s = L.rentStatus(u, S, m, today());
       var cls = s.code === 'paid' ? 'paid' : (s.code === 'overdue' || s.code === 'partial-late') ? 'late' : s.code === 'partial' ? 'part' : s.code === 'soon' ? 'soon' : '';
-      out += '<i class="' + cls + '" title="' + esc(monthFmt(m)) + ': ' + esc(t('st_' + s.code)) + '">' + (big ? monthShort(m) : '') + '</i>';
+      var tip = esc(monthFmt(m)) + ': ' + esc(t('st_' + s.code));
+      if (big && s.code !== 'none' && s.left > 0) out += '<i class="' + cls + '" role="button" tabindex="0" data-act="pay" data-id="' + u.id + '" data-month="' + m + '" title="' + tip + '" aria-label="' + tip + '" style="cursor:pointer">' + monthShort(m) + '</i>';
+      else out += '<i class="' + cls + '" title="' + tip + '">' + (big ? monthShort(m) : '') + '</i>';
     }
     return '<div class="strip' + (big ? ' big' : '') + '" dir="ltr" role="img" aria-label="' + esc(t('ledger')) + '">' + out + '</div>';
   }
@@ -122,14 +125,24 @@
 
   function viewUnits() {
     if (!S.units.length) return emptyUnits();
-    var h = '<div class="page-head"><h1>' + t('nav_units') + '</h1><button class="btn" type="button" data-act="addunit">+ ' + t('add_unit') + '</button></div><div class="grid cards">';
+    var h = '<div class="page-head"><h1>' + t('nav_units') + '</h1><button class="btn" type="button" data-act="addunit">+ ' + t('add_unit') + '</button></div>';
+    h += '<label class="f"><input id="unitSearch" type="search" placeholder="' + esc(t('search')) + '" value="' + esc(unitQuery) + '" style="width:100%;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;min-height:44px"></label>';
+    h += '<div class="seg" role="group">' + ['all', 'overdue', 'expiring', 'vacant'].map(function (f) { return '<button type="button" data-act="ufilt" data-f="' + f + '" aria-pressed="' + (unitFilter === f) + '">' + t('uf_' + f) + '</button>'; }).join('') + '</div><div class="grid cards" id="unitCards">';
+    var q = unitQuery.toLowerCase(), shown = 0;
     S.units.forEach(function (u) {
+      var cs0 = L.contractStatus(u, today()), rs0 = L.rentStatus(u, S, L.monthKey(today()), today());
+      if (unitFilter === 'overdue' && !(rs0.code === 'overdue' || rs0.code === 'partial-late')) return;
+      if (unitFilter === 'expiring' && !(cs0.code === 'expiring' || cs0.code === 'expired')) return;
+      if (unitFilter === 'vacant' && L.isOccupied(u)) return;
+      if (q && (u.name + ' ' + u.tenant + ' ' + u.address + ' ' + u.phone).toLowerCase().indexOf(q) < 0) return;
+      shown++;
       var occ = L.isOccupied(u), s = L.rentStatus(u, S, L.monthKey(today()), today()), c = L.contractStatus(u, today());
       h += '<a class="card tag' + (occ ? '' : ' vac') + '" href="#/unit/' + u.id + '" style="text-decoration:none;color:inherit"><h3>' + esc(u.name) + '</h3>' +
         '<div class="who">' + (occ ? esc(u.tenant) : t('vacant')) + (u.address ? ' · ' + esc(u.address) : '') + '</div>' +
         '<div class="meta"><span class="amt">' + money(u.rent) + ' <small class="muted">' + t('per_month') + '</small></span>' + (occ ? statusChip(s) : chip('vacant', t('vacant'))) + '</div>' +
         (occ ? '<div class="meta" style="margin-top:6px"><small class="muted">' + esc(contractText(c)) + '</small></div>' + ledgerStrip(u) : '') + '</a>';
     });
+    if (!shown) h += '<p class="muted">' + t('no_match') + '</p>';
     return h + '</div>';
   }
 
@@ -149,7 +162,7 @@
       '<dt>' + t('start') + '</dt><dd>' + dateFmt(u.start) + '</dd><dt>' + t('end') + '</dt><dd>' + dateFmt(u.end) + (occ ? ' ' + chip(c.code, contractText(c)) : '') + '</dd>' +
       '<dt>' + t('deposit') + '</dt><dd>' + money(u.deposit) + '</dd>' +
       (u.notes ? '<dt>' + t('notes') + '</dt><dd>' + esc(u.notes) + '</dd>' : '') + '</dl></div>' +
-      '<div class="card"><h2>' + t('ledger') + '</h2>' + ledgerStrip(u, true) +
+      '<div class="card"><h2>' + t('ledger') + '</h2>' + ledgerStrip(u, true) + '<p class="hint" style="margin:8px 0 0">' + t('ledger_hint') + '</p>' +
       '<p class="muted" style="margin:10px 0 0">' + t('total_paid') + ': <b>' + money(total) + '</b>' + (ar.total ? ' · <span style="color:var(--bad)">' + t('arrears') + ': <b>' + money(ar.total) + '</b></span>' : '') + '</p></div></div>';
     h += '<div class="card sec"><h2>' + t('payments') + '</h2>';
     if (!pays.length) h += '<p class="muted">' + t('no_payments') + '</p>';
@@ -347,6 +360,7 @@
       addticket: function () { ticketForm(null, b.dataset.unit); },
       editticket: function () { ticketForm(S.tickets.filter(function (x) { return x.id === id; })[0]); },
       nextticket: function () { var x = S.tickets.filter(function (y) { return y.id === id; })[0]; x.status = { open: 'progress', progress: 'done', done: 'open' }[x.status]; save(); render(); },
+      ufilt: function () { unitFilter = b.dataset.f; render(); },
       filt: function () { tickFilter = b.dataset.f; render(); },
       addrem: remForm,
       toggrem: function () { var r = S.reminders.filter(function (x) { return x.id === id; })[0]; r.done = !r.done; save(); render(); },
@@ -358,9 +372,11 @@
     };
     if (A[act]) A[act]();
   });
+  document.addEventListener('keydown', function (e) { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('.strip i[data-act]')) { e.preventDefault(); e.target.click(); } });
   document.addEventListener('change', function (e) {
     var el = e.target;
-    if (el.id === 'setLang') { S.lang = el.value; save(); render(); }
+    if (el.id === 'unitSearch') { /* handled on input */ }
+    else if (el.id === 'setLang') { S.lang = el.value; save(); render(); }
     else if (el.id === 'setCur') { S.currency = (el.value.trim() || 'EGP').slice(0, 5); save(); toast(t('saved')); }
     else if (el.id === 'setOwner') { S.owner = el.value.trim().slice(0, 60); save(); toast(t('saved')); }
     else if (el.id === 'fileIn' && el.files[0]) {
@@ -380,6 +396,11 @@
       };
       rd2.readAsText(el.files[0]);
     }
+  });
+  document.addEventListener('input', function (e) {
+    if (e.target.id !== 'unitSearch') return;
+    unitQuery = e.target.value; var pos = e.target.selectionStart; render();
+    var n = $('#unitSearch'); n.focus(); try { n.setSelectionRange(pos, pos); } catch (x) { /* ignore */ }
   });
   $('#langBtn').onclick = function () { S.lang = S.lang === 'ar' ? 'en' : 'ar'; save(); render(); };
   window.addEventListener('hashchange', function () { render(); window.scrollTo(0, 0); });
